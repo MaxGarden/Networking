@@ -5,8 +5,8 @@ FILE(GLOB NETWORKING_EXTERNAL_SOURCES
 )
 
 SET(NETWORKING_SOURCES
-	Source/stdafx.h
-	Source/stdafx.cpp
+	Source/pch.h
+	Source/pch.cpp
 )
 
 INCLUDE_DIRECTORIES("${NETWORKING_SOURCE_DIR}/Source")
