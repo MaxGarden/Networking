@@ -86,7 +86,8 @@ bool WebSocketEasywsClient::Send(const IConnectionSharedPtr& connection, const P
     if (!connection)
         return false;
 
-    const auto iterator = m_connections.find(connection->GetID());
+    const auto connectionID = std::static_pointer_cast<IConnectionInternal>(connection)->GetID();
+    const auto iterator = m_connections.find(connectionID);
 
     if (iterator == m_connections.end())
         return false;
@@ -106,7 +107,8 @@ void WebSocketEasywsClient::CloseHandle(const IConnectionSharedPtr& connection)
     if (!connection)
         return;
 
-    const auto iterator = m_connections.find(connection->GetID());
+    const auto connectionID = std::static_pointer_cast<IConnectionInternal>(connection)->GetID();
+    const auto iterator = m_connections.find(connectionID);
     if (iterator == m_connections.end())
         return;
 
