@@ -156,7 +156,7 @@ void WebSocketWebbyServer::CloseHandle(const IConnectionSharedPtr& connection)
     WebbyBeginSocketFrame(webbyConnection, WEBBY_WS_OP_CLOSE);
     WebbyEndSocketFrame(webbyConnection);
 
-    std::static_pointer_cast<IConnectionInternal>(connection)->OnClosed();
+    static_cast<IConnectionInternal*>(connection.get())->OnClosed();
 }
 
 void WebSocketWebbyServer::Update()
