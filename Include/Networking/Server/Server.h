@@ -11,6 +11,6 @@ namespace Networking
     public:
         virtual ~IServer() = default;
 
-        virtual void SetOnClientConnectedCallback(const OnClientConnectedCallback& callback) = 0;
+        virtual void SetOnClientConnectedCallback(OnClientConnectedCallback&& callback) = 0;
     };
 }

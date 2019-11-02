@@ -2,8 +2,10 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.14)
 PROJECT(Networking)
 
 FILE(GLOB NETWORKING_EXTERNAL_SOURCES
-    Source/ThirdParty/webby*.h
-    Source/ThirdParty/webby*.cpp
+    Source/ThirdParty/webby/*.h
+    Source/ThirdParty/webby/*.cpp
+    Source/ThirdParty/easywsclient/*.hpp
+    Source/ThirdParty/easywsclient/*.cpp
 )
 
 SET(NETWORKING_SOURCES
@@ -13,6 +15,7 @@ SET(NETWORKING_SOURCES
     Include/Networking/Network.h
     Include/Networking/Networking.h
     Include/Networking/Connection.h
+    Include/Networking/Client/Client.h
     Include/Networking/Client/WebSocketClient.h
     Include/Networking/Server/Server.h
     Include/Networking/Server/WebSocketServer.h
@@ -22,7 +25,9 @@ SET(NETWORKING_SOURCES
     Source/Networking/ConnectionInternal.h
     Source/Networking/ConnectionInternal.cpp
     
+    Source/Networking/Client/Client.cpp
     Source/Networking/Client/WebSocketClient.cpp
+    Source/Networking/Client/Implementations/WebSocketEasywsClient.cpp
     Source/Networking/Server/Server.cpp
     Source/Networking/Server/WebSocketServer.cpp
     Source/Networking/Server/Implementations/WebSocketWebbyServer.cpp

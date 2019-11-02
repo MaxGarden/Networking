@@ -15,7 +15,7 @@ namespace Networking
 
         virtual bool Initialize() = 0;
 
-        virtual void SetOnConnectionClosedCallback(const OnConnectionClosedCallback& callback) = 0;
+        virtual void SetOnConnectionClosedCallback(OnConnectionClosedCallback&& callback) = 0;
 
         virtual bool Send(const IConnectionSharedPtr& connection, const Payload& data) = 0;
         virtual void CloseHandle(const IConnectionSharedPtr& connection) = 0;

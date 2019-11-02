@@ -13,8 +13,8 @@ public:
 
     virtual bool Initialize() override final;
 
-    virtual void SetOnClientConnectedCallback(const OnClientConnectedCallback& callback) override final;
-    virtual void SetOnConnectionClosedCallback(const OnConnectionClosedCallback& callback) override final;
+    virtual void SetOnClientConnectedCallback(OnClientConnectedCallback&& callback) override final;
+    virtual void SetOnConnectionClosedCallback(OnConnectionClosedCallback&& callback) override final;
 
     virtual bool Send(const IConnectionSharedPtr& connection, const Payload& data) override final;
     virtual void CloseHandle(const IConnectionSharedPtr& connection) override final;
@@ -113,17 +113,17 @@ bool WebSocketWebbyServer::Initialize()
     return m_server != nullptr;
 }
 
-void WebSocketWebbyServer::SetOnClientConnectedCallback(const OnClientConnectedCallback& callback)
+void WebSocketWebbyServer::SetOnClientConnectedCallback(OnClientConnectedCallback&& callback)
 {
     NETWORKING_ASSERT(!m_onConnectedCallback);
-    m_onConnectedCallback = callback;
+    m_onConnectedCallback = std::move(callback);
 }
 
 
-void WebSocketWebbyServer::SetOnConnectionClosedCallback(const OnConnectionClosedCallback& callback)
+void WebSocketWebbyServer::SetOnConnectionClosedCallback(OnConnectionClosedCallback&& callback)
 {
     NETWORKING_ASSERT(!m_onCloseConnectionCallback);
-    m_onCloseConnectionCallback = callback;
+    m_onCloseConnectionCallback = std::move(callback);
 }
 
 bool WebSocketWebbyServer::Send(const IConnectionSharedPtr& connection, const Payload& data)

@@ -6,6 +6,7 @@
 #include <functional>
 #include <assert.h>
 #include <algorithm>
+#include <map>
 
 namespace Networking
 {
@@ -27,4 +28,6 @@ namespace Networking
     DECLARE_POINTERS(IConnection);
     DECLARE_POINTERS(IServer);
     DECLARE_POINTERS(IWebSocketServer);
+    DECLARE_POINTERS(IClient);
+    DECLARE_POINTERS(IWebSocketClient);
 }

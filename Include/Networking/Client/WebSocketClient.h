@@ -1,14 +1,13 @@
 #pragma once
-#include "Network.h"
-#include "Connection.h"
+#include "Client.h"
 
 namespace Networking
 {
-    class IWebSocketClient : public INetwork
+    class IWebSocketClient : public IClient
     {
     public:
         virtual ~IWebSocketClient() override = default;
 
-        virtual IConnectionSharedPtr Connect(const std::string& url) = 0;
+        static IWebSocketClientUniquePtr CreateEasyWs();
     };
 }
