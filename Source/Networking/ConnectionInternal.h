@@ -6,6 +6,9 @@ namespace Networking
     class IConnectionInternal : public IConnection
     {
     public:
-        static IConnectionSharedPtr Create(INetwork& network, const std::string& address);
+        virtual void OnReceived(const Payload& data) = 0;
+        virtual void OnClosed() = 0;
+
+        static IConnectionInternalSharedPtr Create(INetwork& network, const std::string& address);
     };
 }

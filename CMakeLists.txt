@@ -20,6 +20,9 @@ SET(NETWORKING_SOURCES
     Include/Networking/Server/Server.h
     Include/Networking/Server/WebSocketServer.h
     
+    
+    Source/Networking/NetworkingInternal.h
+    
     Source/Networking/Network.cpp
     Source/Networking/Connection.cpp
     Source/Networking/ConnectionInternal.h

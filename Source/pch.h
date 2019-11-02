@@ -7,7 +7,7 @@
 
 #ifdef __cplusplus
 
-#include "Networking.h"
+#include "NetworkingInternal.h"
 
 #endif //__cplusplus
 

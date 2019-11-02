@@ -29,7 +29,7 @@ public:
 
 private:
     WebbyConnection* FindWebbyConnection(const IConnectionSharedPtr& handle) const;
-    IConnectionSharedPtr FindConnection(WebbyConnection* webbyConnection) const;
+    IConnectionInternalSharedPtr FindConnection(WebbyConnection* webbyConnection) const;
 
 private:
     const WebbyServerConfig m_serverConfig;
@@ -156,7 +156,7 @@ void WebSocketWebbyServer::CloseHandle(const IConnectionSharedPtr& connection)
     WebbyBeginSocketFrame(webbyConnection, WEBBY_WS_OP_CLOSE);
     WebbyEndSocketFrame(webbyConnection);
 
-    connection->OnClosed();
+    std::static_pointer_cast<IConnectionInternal>(connection)->OnClosed();
 }
 
 void WebSocketWebbyServer::Update()
@@ -256,14 +256,14 @@ WebbyConnection* WebSocketWebbyServer::FindWebbyConnection(const IConnectionShar
     return connection ? WebbyFindConnectionFromUserData(m_server, connection.get()) : nullptr;
 }
 
-IConnectionSharedPtr WebSocketWebbyServer::FindConnection(WebbyConnection* webbyConnection) const
+IConnectionInternalSharedPtr WebSocketWebbyServer::FindConnection(WebbyConnection* webbyConnection) const
 {
     const auto iterator = find_if(m_connections.begin(), m_connections.end(), [&webbyConnection](const auto& connection) 
     {
         return connection.get() == webbyConnection->user_data;
     });
 
-    return iterator != m_connections.end() ? *iterator : nullptr;
+    return iterator != m_connections.end() ? std::static_pointer_cast<IConnectionInternal>(*iterator) : nullptr;
 }
 
 IWebSocketServerUniquePtr IWebSocketServer::CreateWebby(unsigned short listeningPort, size_t maxClients, size_t requestBufferSize, size_t ioBufferSize)

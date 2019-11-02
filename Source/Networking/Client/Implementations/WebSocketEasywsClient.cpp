@@ -25,7 +25,7 @@ public:
 private:
     struct ConnectionData
     {
-        IConnectionSharedPtr Connection;
+        IConnectionInternalSharedPtr Connection;
         std::unique_ptr<easywsclient::WebSocket> WebSocket;
     };
 
@@ -107,7 +107,6 @@ void WebSocketEasywsClient::CloseHandle(const IConnectionSharedPtr& connection)
         return;
 
     const auto iterator = m_connections.find(connection->GetID());
-
     if (iterator == m_connections.end())
         return;
 
