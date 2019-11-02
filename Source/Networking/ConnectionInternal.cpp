@@ -26,7 +26,7 @@ private:
     const std::string m_address;
     const ConnectionID m_id;
 
-    bool m_isConnected;
+    bool m_isConnected = true;
 }; 
 
 static ConnectionID GetFreeConnectionID()
@@ -36,9 +36,9 @@ static ConnectionID GetFreeConnectionID()
 }
 
 ConnectionInternal::ConnectionInternal(INetwork& network, const std::string& address) :
-    m_network(network),
-    m_address(address),
-    m_id(GetFreeConnectionID())
+    m_network{ network },
+    m_address{ address },
+    m_id{ GetFreeConnectionID() }
 {
 }
 

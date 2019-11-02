@@ -5,6 +5,7 @@
 #include <memory>
 #include <functional>
 #include <assert.h>
+#include <algorithm>
 
 namespace Networking
 {
@@ -24,4 +25,6 @@ namespace Networking
 
     DECLARE_POINTERS(INetwork);
     DECLARE_POINTERS(IConnection);
+    DECLARE_POINTERS(IServer);
+    DECLARE_POINTERS(IWebSocketServer);
 }
