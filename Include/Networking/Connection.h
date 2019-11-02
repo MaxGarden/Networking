@@ -15,7 +15,6 @@ namespace Networking
 
         virtual bool IsConnected() const noexcept = 0;
         virtual const std::string& GetAddress() const noexcept = 0;
-        virtual const ConnectionID& GetID() const noexcept = 0;
 
         virtual void SetOnReceivedCallback(OnReceivedCallback&& callback) = 0;
 
