@@ -7,6 +7,8 @@
 
 #ifdef __cplusplus
 
+#include "Networking.h"
+
 #endif //__cplusplus
 
 #endif //_STDAFX_H_
