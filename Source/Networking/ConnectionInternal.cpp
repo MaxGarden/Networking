@@ -13,6 +13,7 @@ public:
     virtual const std::string& GetAddress() const noexcept override final;
     virtual const ConnectionID& GetID() const noexcept override final;
 
+    virtual void SetOnClosedCallback(OnClosedCallback&& callback) override final;
     virtual void SetOnReceivedCallback(OnReceivedCallback&& callback) override final;
 
     virtual bool Send(const Payload& data) override final;
@@ -28,6 +29,7 @@ private:
 
     bool m_isConnected = true;
 
+    OnClosedCallback m_onClosedCallback;
     OnReceivedCallback m_onReceivedCallback;
 }; 
 
@@ -59,6 +61,12 @@ const ConnectionID& ConnectionInternal::GetID() const noexcept
     return m_id;
 }
 
+void ConnectionInternal::SetOnClosedCallback(OnClosedCallback&& callback)
+{
+    NETWORKING_ASSERT(!m_onClosedCallback);
+    m_onClosedCallback = std::move(callback);
+}
+
 void ConnectionInternal::SetOnReceivedCallback(OnReceivedCallback&& callback)
 {
     NETWORKING_ASSERT(!m_onReceivedCallback);
@@ -84,6 +92,8 @@ void ConnectionInternal::Close()
 void ConnectionInternal::OnClosed()
 {
     m_isConnected = false;
+    if (m_onClosedCallback)
+        m_onClosedCallback();
 }
 
 void ConnectionInternal::OnReceived(const Payload& data)
