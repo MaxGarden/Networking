@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Server/WebSocketServer.h"
+#include "Networking/Server/WebSocketServer.h"
 #include "ConnectionInternal.h"
 #include <webby/webby.h>
 

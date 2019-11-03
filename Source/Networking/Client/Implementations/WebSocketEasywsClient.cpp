@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Client/WebSocketClient.h"
+#include "Networking/Client/WebSocketClient.h"
 #include "ConnectionInternal.h"
 #include "easywsclient/easywsclient.hpp"
 

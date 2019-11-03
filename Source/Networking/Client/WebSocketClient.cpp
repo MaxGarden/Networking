@@ -1,2 +1,2 @@
 #include "pch.h"
-#include "Client/WebSocketClient.h"
+#include "Networking/Client/WebSocketClient.h"

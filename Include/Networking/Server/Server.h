@@ -1,5 +1,5 @@
 #pragma once
-#include "Network.h"
+#include "Networking/Network.h"
 
 namespace Networking
 {
