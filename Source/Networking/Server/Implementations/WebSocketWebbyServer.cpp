@@ -130,7 +130,6 @@ void WebSocketWebbyServer::SetOnClientConnectedCallback(OnClientConnectedCallbac
     m_onConnectedCallback = std::move(callback);
 }
 
-
 void WebSocketWebbyServer::SetOnConnectionClosedCallback(OnConnectionClosedCallback&& callback)
 {
     NETWORKING_ASSERT(!m_onCloseConnectionCallback);
@@ -235,11 +234,7 @@ void WebSocketWebbyServer::OnConnected(WebbyConnection* webbyConnection)
     webbyConnection->user_data = connection.get();
     m_connections.emplace_back(connection);
 
-    if (!m_onConnectedCallback(connection, webbyConnection->request.query_params ? webbyConnection->request.query_params : ""))
-    {
-        if (connection->IsConnected())
-            connection->Close();
-    }
+    m_onConnectedCallback(connection);
 }
 
 void WebSocketWebbyServer::OnConnectionClosed(WebbyConnection* webbyConnection)
