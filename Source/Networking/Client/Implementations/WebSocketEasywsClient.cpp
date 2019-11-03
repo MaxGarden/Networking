@@ -73,7 +73,7 @@ IConnectionSharedPtr WebSocketEasywsClient::Connect(const std::string& address, 
     const auto url = BuildUrl(address, port);
 
     ConnectionData connectionData;
-    connectionData.WebSocket.reset(easywsclient::WebSocket::from_url(url));
+    connectionData.WebSocket.reset(easywsclient::WebSocket::from_url(url, std::string{}, timeoutInMiliSeconds));
 
     if (!connectionData.WebSocket)
         return nullptr;
