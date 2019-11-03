@@ -9,7 +9,7 @@ class WebSocketEasywsClient final : public IWebSocketClient
 {
 public:
     WebSocketEasywsClient() = default;
-    virtual ~WebSocketEasywsClient() override final = default;
+    virtual ~WebSocketEasywsClient() override final;
 
     virtual bool Initialize() override final;
     virtual void Finalize() override final;
@@ -34,6 +34,11 @@ private:
     std::map<ConnectionID, ConnectionData> m_connections;
     OnConnectionClosedCallback m_onCloseConnectionCallback;
 };
+
+WebSocketEasywsClient::~WebSocketEasywsClient()
+{
+    Finalize();
+}
 
 bool WebSocketEasywsClient::Initialize()
 {
