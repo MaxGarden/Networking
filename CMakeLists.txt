@@ -3,7 +3,7 @@ PROJECT(Networking)
 
 FILE(GLOB NETWORKING_EXTERNAL_SOURCES
     Source/ThirdParty/webby/*.h
-    Source/ThirdParty/webby/*.cpp
+    Source/ThirdParty/webby/*.c
     Source/ThirdParty/easywsclient/*.hpp
     Source/ThirdParty/easywsclient/*.cpp
 )
