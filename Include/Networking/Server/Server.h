@@ -6,7 +6,7 @@ namespace Networking
     class IServer : public INetwork
     {
     public:
-        using OnClientConnectedCallback = std::function<bool(IConnectionSharedPtr connection)>;
+        using OnClientConnectedCallback = std::function<void(IConnectionSharedPtr connection)>;
 
     public:
         virtual ~IServer() = default;
