@@ -23,8 +23,8 @@ class WebSocket {
 
     // Factories:
     static pointer create_dummy();
-    static pointer from_url(const std::string& url, const std::string& origin = std::string());
-    static pointer from_url_no_mask(const std::string& url, const std::string& origin = std::string());
+    static pointer from_url(const std::string& url, const std::string& origin = std::string(), size_t timeoutInMiliseconds = 2000u);
+    static pointer from_url_no_mask(const std::string& url, const std::string& origin = std::string(), size_t timeoutInMiliseconds = 2000u);
 
     // Interfaces:
     virtual ~WebSocket() { }

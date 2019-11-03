@@ -83,7 +83,7 @@ using easywsclient::BytesCallback_Imp;
 
 namespace { // private module-only namespace
 
-    socket_t hostname_connect(const std::string& hostname, int port) {
+    socket_t hostname_connect(const std::string& hostname, int port, size_t timeoutInMiliseconds) {
         struct addrinfo hints;
         struct addrinfo *result;
         struct addrinfo *p;
@@ -116,8 +116,8 @@ namespace { // private module-only namespace
             FD_SET(sockfd, &fdset);
 
             timeval tv;
-            tv.tv_sec = 2;
-            tv.tv_usec = 0;
+            tv.tv_sec = static_cast<long>(timeoutInMiliseconds / 1000);
+            tv.tv_usec = static_cast<long>((timeoutInMiliseconds % 1000) * 1000);
 
             connect(sockfd, p->ai_addr, p->ai_addrlen);
 
@@ -458,7 +458,7 @@ namespace { // private module-only namespace
     };
 
 
-    easywsclient::WebSocket::pointer from_url(const std::string& url, bool useMask, const std::string& origin) {
+    easywsclient::WebSocket::pointer from_url(const std::string& url, bool useMask, const std::string& origin, size_t timeoutInMiliseconds) {
         char host[128];
         int port;
         char path[128];
@@ -488,7 +488,7 @@ namespace { // private module-only namespace
             return NULL;
         }
         fprintf(stderr, "easywsclient: connecting: host=%s port=%d path=/%s\n", host, port, path);
-        socket_t sockfd = hostname_connect(host, port);
+        socket_t sockfd = hostname_connect(host, port, timeoutInMiliseconds);
         if (sockfd == INVALID_SOCKET) {
             fprintf(stderr, "Unable to connect to %s:%d\n", host, port);
             return NULL;
@@ -566,12 +566,12 @@ namespace easywsclient {
     }
 
 
-    WebSocket::pointer WebSocket::from_url(const std::string& url, const std::string& origin) {
-        return ::from_url(url, true, origin);
+    WebSocket::pointer WebSocket::from_url(const std::string& url, const std::string& origin, size_t timeoutInMiliseconds) {
+        return ::from_url(url, true, origin, timeoutInMiliseconds);
     }
 
-    WebSocket::pointer WebSocket::from_url_no_mask(const std::string& url, const std::string& origin) {
-        return ::from_url(url, false, origin);
+    WebSocket::pointer WebSocket::from_url_no_mask(const std::string& url, const std::string& origin, size_t timeoutInMiliseconds) {
+        return ::from_url(url, false, origin, timeoutInMiliseconds);
     }
 
 
