@@ -12,12 +12,13 @@ public:
     virtual ~WebSocketWebbyServer() override final;
 
     virtual bool Initialize() override final;
+    virtual void Finalize() override final;
 
     virtual void SetOnClientConnectedCallback(OnClientConnectedCallback&& callback) override final;
     virtual void SetOnConnectionClosedCallback(OnConnectionClosedCallback&& callback) override final;
 
     virtual bool Send(const IConnectionSharedPtr& connection, const Payload& data) override final;
-    virtual void CloseHandle(const IConnectionSharedPtr& connection) override final;
+    virtual void CloseConnection(const IConnectionSharedPtr& connection) override final;
 
     virtual void Update() override final;
 
@@ -38,7 +39,7 @@ private:
     std::unique_ptr<byte> m_serverMemory;
     OnClientConnectedCallback m_onConnectedCallback;
     OnConnectionClosedCallback m_onCloseConnectionCallback;
-    std::vector<IConnectionSharedPtr> m_connections;
+    std::vector<IConnectionInternalSharedPtr> m_connections;
 };
 
 static WebSocketWebbyServer* currentInstance = nullptr;
@@ -89,12 +90,7 @@ WebSocketWebbyServer::WebSocketWebbyServer(unsigned short listeningPort, size_t 
 
 WebSocketWebbyServer::~WebSocketWebbyServer()
 {
-    if (!m_server)
-    {
-        WebbyServerShutdown(m_server);
-        m_server = nullptr;
-        m_serverMemory.reset();
-    }
+    Finalize();
 }
 
 bool WebSocketWebbyServer::Initialize()
@@ -111,6 +107,21 @@ bool WebSocketWebbyServer::Initialize()
     m_server = WebbyServerInit(&m_serverConfig, m_serverMemory.get(), serverMemeorySize);
 
     return m_server != nullptr;
+}
+
+void WebSocketWebbyServer::Finalize()
+{
+    if (!m_server)
+        return;
+
+    std::vector<IConnectionInternalSharedPtr> connections(m_connections.cbegin(), m_connections.cend());
+
+    for (const auto& connection : connections)
+        CloseConnection(connection);
+
+    WebbyServerShutdown(m_server);
+    m_server = nullptr;
+    m_serverMemory.reset();
 }
 
 void WebSocketWebbyServer::SetOnClientConnectedCallback(OnClientConnectedCallback&& callback)
@@ -145,7 +156,7 @@ bool WebSocketWebbyServer::Send(const IConnectionSharedPtr& connection, const Pa
     return false;
 }
 
-void WebSocketWebbyServer::CloseHandle(const IConnectionSharedPtr& connection)
+void WebSocketWebbyServer::CloseConnection(const IConnectionSharedPtr& connection)
 {
     const auto webbyConnection = FindWebbyConnection(connection);
     NETWORKING_ASSERT(webbyConnection);
@@ -222,7 +233,7 @@ void WebSocketWebbyServer::OnConnected(WebbyConnection* webbyConnection)
 
     const auto connection = IConnectionInternal::Create(*this, webbyConnection->address);
     webbyConnection->user_data = connection.get();
-    m_connections.push_back(connection);
+    m_connections.emplace_back(connection);
 
     if (!m_onConnectedCallback(connection, webbyConnection->request.query_params ? webbyConnection->request.query_params : ""))
     {
@@ -263,7 +274,7 @@ IConnectionInternalSharedPtr WebSocketWebbyServer::FindConnection(WebbyConnectio
         return connection.get() == webbyConnection->user_data;
     });
 
-    return iterator != m_connections.end() ? std::static_pointer_cast<IConnectionInternal>(*iterator) : nullptr;
+    return iterator != m_connections.end() ? *iterator : nullptr;
 }
 
 IWebSocketServerUniquePtr IWebSocketServer::CreateWebby(unsigned short listeningPort, size_t maxClients, size_t requestBufferSize, size_t ioBufferSize)

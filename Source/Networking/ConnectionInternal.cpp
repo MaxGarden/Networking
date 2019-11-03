@@ -86,7 +86,7 @@ void ConnectionInternal::Close()
     if (!m_isConnected)
         return;
 
-    m_network.CloseHandle(shared_from_this());
+    m_network.CloseConnection(shared_from_this());
 }
 
 void ConnectionInternal::OnClosed()

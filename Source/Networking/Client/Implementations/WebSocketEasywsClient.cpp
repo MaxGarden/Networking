@@ -12,13 +12,14 @@ public:
     virtual ~WebSocketEasywsClient() override final = default;
 
     virtual bool Initialize() override final;
+    virtual void Finalize() override final;
 
     virtual IConnectionSharedPtr Connect(const std::string& address, unsigned short port, size_t timeoutInMiliSeconds = 2000u) override final;
 
     virtual void SetOnConnectionClosedCallback(OnConnectionClosedCallback&& callback) override final;
 
     virtual bool Send(const IConnectionSharedPtr& connection, const Payload& data) override final;
-    virtual void CloseHandle(const IConnectionSharedPtr& connection) override final;
+    virtual void CloseConnection(const IConnectionSharedPtr& connection) override final;
 
     virtual void Update() override final;
 
@@ -37,6 +38,18 @@ private:
 bool WebSocketEasywsClient::Initialize()
 {
     return true;
+}
+
+void WebSocketEasywsClient::Finalize()
+{
+    std::vector<IConnectionInternalSharedPtr> connections;
+    connections.reserve(m_connections.size());
+
+    for (const auto& pair : m_connections)
+        connections.emplace_back(pair.second.Connection);
+
+    for (const auto& connection : connections)
+        CloseConnection(connection);
 }
 
 static std::string BuildUrl(const std::string& address, unsigned short port)
@@ -102,7 +115,7 @@ bool WebSocketEasywsClient::Send(const IConnectionSharedPtr& connection, const P
     return false;
 }
 
-void WebSocketEasywsClient::CloseHandle(const IConnectionSharedPtr& connection)
+void WebSocketEasywsClient::CloseConnection(const IConnectionSharedPtr& connection)
 {
     if (!connection)
         return;
