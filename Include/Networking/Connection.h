@@ -12,7 +12,7 @@ namespace Networking
         using OnReceivedCallback = std::function<void(const Payload&)>;
 
     public:
-        virtual ~IConnection() = 0;
+        virtual ~IConnection() = default;
 
         virtual bool IsConnected() const noexcept = 0;
         virtual const std::string& GetAddress() const noexcept = 0;
