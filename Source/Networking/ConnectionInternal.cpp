@@ -7,7 +7,7 @@ class ConnectionInternal final : public IConnectionInternal, public std::enable_
 {
 public:
     ConnectionInternal(INetwork& network, const std::string& address);
-    virtual ~ConnectionInternal() override = default;
+    virtual ~ConnectionInternal() override;
 
     virtual bool IsConnected() const noexcept override final;
     virtual const std::string& GetAddress() const noexcept override final;
@@ -44,6 +44,11 @@ ConnectionInternal::ConnectionInternal(INetwork& network, const std::string& add
     m_address{ address },
     m_id{ GetFreeConnectionID() }
 {
+}
+
+ConnectionInternal::~ConnectionInternal()
+{
+    Close();
 }
 
 bool ConnectionInternal::IsConnected() const noexcept
