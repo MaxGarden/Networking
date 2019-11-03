@@ -10,6 +10,9 @@
 
 namespace Networking
 {
+    bool Initialize();
+    void Finalize();
+
     using byte = unsigned char;
 
     #define NETWORKING_ASSERT(expression) assert(expression)

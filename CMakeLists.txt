@@ -23,6 +23,7 @@ SET(NETWORKING_SOURCES
     Source/Networking/NetworkingInternal.h
     
     Source/Networking/Network.cpp
+    Source/Networking/Networking.cpp
     Source/Networking/Connection.cpp
     Source/Networking/ConnectionInternal.h
     Source/Networking/ConnectionInternal.cpp
