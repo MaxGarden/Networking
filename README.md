@@ -1,28 +1,35 @@
 # Networking
+## Budowanie
+Wymagane jest zainstalowane oprogramowanie cmake. 
+Aby wygenerować projekt dla systemu:
+ - Windows
+należy użyć skryptu **generate_vs_2019_x64_project.bat**.
+ - MacOS
+należy użyć skryptu **generate_xcode_project**.
 ## Interfejs reprezentujący połączenie
 ```
 namespace Networking
 {
-	using ConnectionID = size_t;
+    using ConnectionID = size_t;
 
-	class IConnection
-	{
-	public:
-		using OnClosedCallback = std::function<void()>;
-		using OnReceivedCallback = std::function<void(const Payload&)>;
+    class IConnection
+    {
+    public:
+        using OnClosedCallback = std::function<void()>;
+        using OnReceivedCallback = std::function<void(const Payload&)>;
 
-	public:
-		virtual ~IConnection() = default;
+    public:
+        virtual ~IConnection() = default;
 
-		virtual bool IsConnected() const noexcept = 0;
-		virtual const std::string& GetAddress() const noexcept = 0;
+        virtual bool IsConnected() const noexcept = 0;
+        virtual const std::string& GetAddress() const noexcept = 0;
 
-		virtual void SetOnClosedCallback(OnClosedCallback&& callback) = 0;
-		virtual void SetOnReceivedCallback(OnReceivedCallback&& callback) = 0;
+        virtual void SetOnClosedCallback(OnClosedCallback&& callback) = 0;
+        virtual void SetOnReceivedCallback(OnReceivedCallback&& callback) = 0;
 
-		virtual bool Send(const Payload& data) = 0;
-		virtual void Close() = 0;
-	};
+        virtual bool Send(const Payload& data) = 0;
+        virtual void Close() = 0;
+    };
 }
 ```
 
@@ -52,26 +59,26 @@ virtual void Close()
 ```
 namespace Networking
 {
-	using Payload = std::vector<byte>;
+    using Payload = std::vector<byte>;
 
-	class INetwork
-	{
-	public:
-		using OnConnectionClosedCallback = std::function<void(IConnectionSharedPtr connection)>;
-		
-	public:
-		virtual ~INetwork() = default;
+    class INetwork
+    {
+    public:
+        using OnConnectionClosedCallback = std::function<void(IConnectionSharedPtr connection)>;
+        
+    public:
+        virtual ~INetwork() = default;
 
-		virtual bool Initialize() = 0;
-		virtual void Finalize() = 0;
+        virtual bool Initialize() = 0;
+        virtual void Finalize() = 0;
 
-		virtual void SetOnConnectionClosedCallback(OnConnectionClosedCallback&& callback) = 0;
+        virtual void SetOnConnectionClosedCallback(OnConnectionClosedCallback&& callback) = 0;
 
-		virtual bool Send(const IConnectionSharedPtr& connection, const Payload& data) = 0;
-		virtual void CloseConnection(const IConnectionSharedPtr& connection) = 0;
+        virtual bool Send(const IConnectionSharedPtr& connection, const Payload& data) = 0;
+        virtual void CloseConnection(const IConnectionSharedPtr& connection) = 0;
 
-		virtual void Update() = 0;
-	};
+        virtual void Update() = 0;
+    };
 }
 ```
 
@@ -105,16 +112,16 @@ virtual void Update()
 ```
 namespace Networking
 {
-	class IServer : public INetwork
-	{
-	public:
-		using OnClientConnectedCallback = std::function<void(IConnectionSharedPtr connection)>;
+    class IServer : public INetwork
+    {
+    public:
+        using OnClientConnectedCallback = std::function<void(IConnectionSharedPtr connection)>;
 
-	public:
-		virtual ~IServer() = default;
+    public:
+        virtual ~IServer() = default;
 
-		virtual void SetOnClientConnectedCallback(OnClientConnectedCallback&& callback) = 0;
-	};
+        virtual void SetOnClientConnectedCallback(OnClientConnectedCallback&& callback) = 0;
+    };
 }
 ```
 Udostępnia metodę umożliwiającą ustawienie wywołania zwrotnego na zakończenie połączenie przez klienta
@@ -126,13 +133,13 @@ virtual void SetOnClientConnectedCallback(OnClientConnectedCallback&& callback)
 ```
 namespace Networking
 {
-	class IClient : public INetwork
-	{
-	public:
-		virtual ~IClient() override = default;
+    class IClient : public INetwork
+    {
+    public:
+        virtual ~IClient() override = default;
 
-		virtual IConnectionSharedPtr Connect(const std::string& address, unsigned short port, size_t timeoutInMiliSeconds = 2000u) = 0;
-	};
+        virtual IConnectionSharedPtr Connect(const std::string& address, unsigned short port, size_t timeoutInMiliSeconds = 2000u) = 0;
+    };
 }
 ```
 Udostępnia metodę umożliwiająca połączenie się z serwerem
